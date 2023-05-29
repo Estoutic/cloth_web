@@ -6,11 +6,10 @@ type ProductDto = {
     id: string;
     count: number;
 }
-type Params = { products:ProductDto[] };
 const useProductPurchase = (): UseMutationResult<number | undefined, AxiosError<unknown, any>, Params> => {
     const queryClient = useQueryClient();
         
-    return useMutation((data: Params) => purchase(data), {
+    return useMutation((data: ProductDto) => purchase(data), {
       onSuccess: (data) => {
         console.log(data);
       },

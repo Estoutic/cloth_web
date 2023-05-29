@@ -4,83 +4,91 @@ import useProducts from "../../../../api/product/useProducts";
 import { useLocation } from "react-router-dom";
 import userStore from "../../basket/useStore";
 import useStore from "../../basket/useStore";
+import ProductPrice from "./ProductPrice";
 
-const ProductTableContainer = styled.table`
+
+const ProductTableContainer = styled.div`
   margin-top: 100px;
-  border-collapse: collapse;
   width: 90%;
-  margin-left: 4%;
+  margin-left: 5%;
 `;
 
-const ProductTableHeaderCell = styled.th`
-  background-color: #393e46;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  color: #ffffff;
-  font-weight: bold;
-  padding: 8px;
+const ProductsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 30px;
+`;
+const ProductCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: calc((100% - 30px) / 2);
+  margin-left: 0; 
+
+  &:nth-child(3) { 
+    margin-left: 40%; 
+  }
+
+  &:first-child { 
+    margin-left: 40%; 
+  }
 `;
 
 const ProductImage = styled.img`
-  width: 35px;
-  height: 30px;
-`;
-const ProductCountInput = styled.input`
-  width: 60px;
-`;
-
-const ProductTableRow = styled.tr`
-  background-color: #878787;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 `;
 
-const ProductTableCell = styled.td`
-  border: 1px solid #cccccc;
-  padding: 8px;
+const ProductName = styled.h3`
+  margin-top: 20px;
+  font-size: 1.25em;
   text-align: center;
+  color:black ;
+`;
+
+const ProductCountInputContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const ProductButton = styled.button`
   cursor: pointer;
   text-align: center;
-  background-color: white;
-  color: black;
-  margin-top: 2%;
-  width: 60%;
-  height: 60%;
-  margin-left: 20%;
+  background-color: #e5e5e5;
+  color: #333333;
+  width: 100%;
+  height: 40px;
+  border: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #d4d4d4;
+  }
 `;
 
-const ProductContainer = () => {
 
-  // let {state} = useLocation();
-  // console.log(state);
-  
+const ProductContainer = () => {
   const location = useLocation();
 
   const categoryName = decodeURI(location.pathname).substring(1);
-  console.log({categoryName});
-  
+  console.log({ categoryName });
+
   const { data } = useProducts(categoryName);
   console.log(data);
   const [counts, setCounts] = useState(data ? Array(data.length).fill(0) : []);
   const { addToCart } = useStore();
   if (!data) {
-    //проверка data
     return null;
   }
-
   return (
     <ProductTableContainer>
-      <thead>
-        <tr>
-          <ProductTableHeaderCell>Название</ProductTableHeaderCell>
-          <ProductTableHeaderCell>Фото</ProductTableHeaderCell>
-          <ProductTableHeaderCell>Цена</ProductTableHeaderCell>
-          <ProductTableHeaderCell>Количество</ProductTableHeaderCell>
-          <ProductTableHeaderCell>Купить</ProductTableHeaderCell>
-        </tr>
-      </thead>
-
-      <tbody>
+      <ProductsGrid>
         {data.map((product, index) => {
           const handleCountChange = (event) => {
             const value = event.target.valueAsNumber;
@@ -111,30 +119,26 @@ const ProductContainer = () => {
           };
 
           return (
-            <ProductTableRow key={product.id}>
-              <ProductTableCell>{product.name}</ProductTableCell>
-              <ProductTableCell>
-                <ProductImage src={product.imageLink} alt={product.name} />
-              </ProductTableCell>
-              <ProductTableCell>{product.price}</ProductTableCell>
-              <ProductTableCell>
-                <ProductCountInput
+            <ProductCard key={product.id}>
+              <ProductImage src={product.imageLink} alt={product.name} />
+              <ProductName>{product.name}</ProductName>
+              <ProductPrice price ={product.price} />
+              <ProductCountInputContainer>
+                {/* <ProductCountInput
                   type="number"
                   min={0}
                   max={product.count}
                   value={counts[index]}
                   onChange={handleCountChange}
-                />
-              </ProductTableCell>
-              <ProductTableCell>
-                <ProductButton onClick={handleButtonClick}>
-                  Добавить в корзину
-                </ProductButton>
-              </ProductTableCell>
-            </ProductTableRow>
+                /> */}
+              </ProductCountInputContainer>
+              <ProductButton onClick={handleButtonClick}>
+                Добавить в корзину
+              </ProductButton>
+            </ProductCard>
           );
         })}
-      </tbody>
+      </ProductsGrid>
     </ProductTableContainer>
   );
 };

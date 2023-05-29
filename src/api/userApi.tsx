@@ -22,20 +22,16 @@ interface Product {
   count: number;
   categoryId: string;
 }
-interface ProductPurchase{
-  id: string;
-  count: number;
+interface ProductDto {
+  name: string;
+  products: string[];
 }
-
-export async function purchase(purchaseData: ProductPurchase[]) :Promise<void>{
+export async function purchase(purchaseData: ProductDto) :Promise<void>{
   console.log(purchaseData);
-  const body = {
-    products: purchaseData
-  };
   try {
     const response: AxiosResponse<AuthFormData> = await axios.post(
-      "http://0.0.0.0:8080/purchase",
-      body,
+      "http://0.0.0.0:8080/productList",
+      purchaseData,
       {
         headers: {
           Authorization: `Bearer ${getAuthToken()}`,

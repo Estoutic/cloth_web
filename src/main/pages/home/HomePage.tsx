@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import TopBar from "./topbar/TopBar";
-import useProductCategories from "../../../api/product/useProductCategories";
+import SideBar from "./topbar/SideBar";
 
 const HomePage = () => {
 
   return (
     <>
-      <TopBar/>
+      <SideBar/>
     </>
   );
 };

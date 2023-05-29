@@ -1,44 +1,42 @@
 import create from "zustand";
-import { persist } from "zustand/middleware";
 
 type CartItem = {
   id: number;
   name: string;
   price: number;
-  count: number;
   imageLink: string;
 };
 type CartStore = {
   cartItems: CartItem[];
   totalPrice: number;
-  addToCart: (product: CartItem, count: number) => void;
-  removeFromCart: (id: number) => void; // новый метод для удаления товара
+  addToCart: (product: CartItem) => void;
+  removeFromCart: (id: number) => void; 
 };
 
 
 const useStore = create<CartStore>((set) => ({
   cartItems: [],
   totalPrice: 0,
-  addToCart: (product, count) => {
+  addToCart: (product) => {
+    console.log(product);
     set((state) => {
       const itemInCartIndex = state.cartItems.findIndex(
         (item) => item.id === product.id
       );
       const newCartItems = [...state.cartItems];
       if (itemInCartIndex >= 0) {
-        newCartItems[itemInCartIndex].count += count;
+        return null;
       } else {
         newCartItems.push({
           id: product.id,
           name: product.name,
           price: product.price,
-          count: count,
           imageLink: product.imageLink,
         });
+        const newTotalPrice = state.totalPrice + product.price;
+        console.log(`added ${product.id}`);
+        return { cartItems: newCartItems, totalPrice: newTotalPrice };
       }
-      const newTotalPrice = state.totalPrice + product.price * count;
-      console.log(`added ${product.id}`);
-      return { cartItems: newCartItems, totalPrice: newTotalPrice };
     });
   },
   removeFromCart: (id) => {
@@ -53,7 +51,7 @@ const useStore = create<CartStore>((set) => ({
           ...state.cartItems.slice(itemInCartIndex + 1),
         ];
         const newTotalPrice =
-          state.totalPrice - itemToRemove.price * itemToRemove.count;
+          state.totalPrice - itemToRemove.price;
         console.log(`removed ${itemToRemove.id}`);
         return { cartItems: newCartItems, totalPrice: newTotalPrice };
       } else {

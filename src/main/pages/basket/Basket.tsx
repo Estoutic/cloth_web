@@ -1,159 +1,176 @@
 import React, { useState } from "react";
 import useStore from "./useStore";
 import styled from "styled-components";
-import TopBar from "../home/topbar/TopBar";
+import TopBar from "../home/topbar/SideBar";
 import Modal from "./Modal";
 import useProductPurchase from "../../../api/product/useProducrPurchase";
 
-const CartContainer = styled.div`
+const CartTableContainer = styled.div`
   margin-top: 100px;
-  margin-left: 4%;
-`;
-
-const CartTableContainer = styled.table`
-  border-collapse: collapse;
   width: 90%;
+  margin-left: 5%;
+`;
+const ProductsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 30px;
+`;
+const ProductCard = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: calc((100% - 30px) / 2);
+  margin-left: 0;
+
+  &:nth-child(3) {
+    margin-left: 40%;
+  }
+
+  &:first-child {
+    margin-left: 40%;
+  }
 `;
 
 const ProductImage = styled.img`
-  width: 35px;
-  height: 30px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 `;
 
-const CartTableHeaderCell = styled.th`
-  background-color: #393e46;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  color: #ffffff;
-  font-weight: bold;
-  padding: 8px;
-`;
-
-const CartTableRow = styled.tr`
-  background-color: #878787;
-`;
-
-const CartTableCell = styled.td`
-  border: 1px solid #cccccc;
-  padding: 8px;
+const ProductName = styled.h3`
+  margin-top: 20px;
+  font-size: 1.25em;
   text-align: center;
+  color: black;
 `;
 
-const CartButton = styled.button`
+const ProductCountInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const SaveImage = styled.img`
+  width: 30px;
+  height: 30px;
+  outline: none;
+  margin-left: 22px;
+  z-index: 9999;
+  top: 35px;
+  position: absolute;
+  right: 5%;
+  cursor: pointer;
+`;
+
+const ProductButton = styled.button`
   cursor: pointer;
   text-align: center;
-  background-color: white;
-  color: black;
-  margin-top: 2%;
-  width: 80%;
-  height: 60%;
-  margin-left: 5%;
-`;
-
-const CartTotalRow = styled.tr`
-  background-color: #393e46;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  color: #ffffff;
+  background-color: #e5e5e5;
+  color: #333333;
+  width: 100%;
+  height: 40px;
+  border: none;
   font-weight: bold;
-  text-align: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #d4d4d4;
+  }
+`;
+const Input = styled.input`
+  width: 200px;
+  height: 30px;
+  background-color: #ffffff;
+  margin-right:20px ;
+  color: black;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  position: absolute;
+  top: 30px;
+  right: 10%;
 `;
 
 type Props = {
   onClick: () => void;
 };
-
 interface ProductPurchase {
-  id: string;
-  count: number;
+  name: string;
+  products: string[];
 }
 type CartItem = {
   id: number;
   name: string;
   price: number;
-  count: number;
   imageLink: string;
 };
 
 const RemoveFromCartButton: React.FC<Props> = ({ onClick }) => {
-  return <CartButton onClick={onClick}>Убрать</CartButton>;
+  return <ProductButton onClick={onClick}>Убрать</ProductButton>;
 };
 
-const Cart: React.FC = () => {
+const Basket: React.FC = () => {
   const { cartItems, removeFromCart, clearCart } = useStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [listName, setListName] = useState("");
 
-  const total = cartItems.reduce(
-    (acc, curr) => acc + curr.count * curr.price,
-    0
-  );
+  const total = cartItems.reduce((acc, curr) => acc + curr.price, 0);
 
   const { mutate } = useProductPurchase();
 
-  const handleOpenModal = () => {
-    const productPurchases: ProductPurchase[] = cartItems.map(
-      (item: CartItem): ProductPurchase => ({
-        id: item.id.toString(),
-        count: item.count,
-      })
-    );
-    console.log(cartItems);
-    mutate(productPurchases);
-    setIsModalOpen(true);
-    clearCart();
-  };
+  const handleImageClick = () => {
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+    const productIds: string[] = cartItems.map((item: CartItem) =>
+    item.id.toString()
+  );
+  const productPurchases: ProductPurchase = {
+    name: listName,
+    products: productIds,
   };
+  console.log(productPurchases);
+  mutate(productPurchases);
+  // clearCart();
+};
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setListName(e.target.value);
+  
+    
+    
+  }
 
   return (
     <>
       <TopBar />
-      <CartContainer>
-        <CartTableContainer>
-          <thead>
-            <tr>
-              <CartTableHeaderCell>Название</CartTableHeaderCell>
-              <CartTableHeaderCell>Фото</CartTableHeaderCell>
-              <CartTableHeaderCell>Цена</CartTableHeaderCell>
-              <CartTableHeaderCell>Количество</CartTableHeaderCell>
-              <CartTableHeaderCell>Общая сумма</CartTableHeaderCell>
-              <CartTableHeaderCell></CartTableHeaderCell>
-            </tr>
-          </thead>
 
-          <tbody>
-            {cartItems.map((item) => (
-              <CartTableRow key={item.id}>
-                <CartTableCell>{item.name}</CartTableCell>
-                <CartTableCell>
-                  <ProductImage src={item.imageLink} alt={item.name} />
-                </CartTableCell>
-                <CartTableCell>{item.price}</CartTableCell>
-                <CartTableCell>{item.count}</CartTableCell>
-                <CartTableCell>{item.count * item.price}</CartTableCell>
-                <CartTableCell>
-                  <RemoveFromCartButton
-                    onClick={() => removeFromCart(item.id)}
-                  />
-                </CartTableCell>
-              </CartTableRow>
-            ))}
-            <CartTotalRow>
-              <CartTableCell colSpan={4}>Общая сумма:</CartTableCell>
-              <CartTableCell>{total}</CartTableCell>
-              <CartTableCell>
-                <CartButton onClick={handleOpenModal}>
-                  Оформить заказ
-                </CartButton>
-              </CartTableCell>
-            </CartTotalRow>
-          </tbody>
-        </CartTableContainer>
-
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
-      </CartContainer>
+      <CartTableContainer>
+        <ProductsGrid>
+          {cartItems.map((product) => {
+            return (
+              <ProductCard key={product.id}>
+                <ProductImage src={product.imageLink} alt={product.name} />
+                <ProductName>{product.name}</ProductName>
+                <ProductCountInputContainer></ProductCountInputContainer>
+                <RemoveFromCartButton
+                  onClick={() => removeFromCart(product.id)}
+                />
+              </ProductCard>
+            );
+          })}
+        </ProductsGrid>
+      </CartTableContainer>
+      <Input
+        type="text"
+        value={listName}
+        onChange={(e) => handleInputChange(e)}
+        placeholder="Введите название списка"
+      />
+      <SaveImage src="save.png" alt="lists" onClick={handleImageClick}/>
     </>
   );
 };
 
-export default Cart;
+export default Basket;
