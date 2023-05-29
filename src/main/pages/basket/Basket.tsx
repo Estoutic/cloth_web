@@ -85,7 +85,7 @@ const Input = styled.input`
   width: 200px;
   height: 30px;
   background-color: #ffffff;
-  margin-right:20px ;
+  margin-right: 20px;
   color: black;
   padding: 5px 10px;
   border: 1px solid #ccc;
@@ -123,24 +123,20 @@ const Basket: React.FC = () => {
   const { mutate } = useProductPurchase();
 
   const handleImageClick = () => {
-
     const productIds: string[] = cartItems.map((item: CartItem) =>
-    item.id.toString()
-  );
-  const productPurchases: ProductPurchase = {
-    name: listName,
-    products: productIds,
+      item.id.toString()
+    );
+    const productPurchases: ProductPurchase = {
+      name: listName,
+      products: productIds,
+    };
+    console.log(productPurchases);
+    mutate(productPurchases);
+    clearCart();
   };
-  console.log(productPurchases);
-  mutate(productPurchases);
-  // clearCart();
-};
-const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setListName(e.target.value);
-  
-    
-    
-  }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setListName(e.target.value);
+  };
 
   return (
     <>
@@ -168,7 +164,7 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange={(e) => handleInputChange(e)}
         placeholder="Введите название списка"
       />
-      <SaveImage src="save.png" alt="lists" onClick={handleImageClick}/>
+      <SaveImage src="save.png" alt="lists" onClick={handleImageClick} />
     </>
   );
 };

@@ -22,11 +22,19 @@ interface Product {
   count: number;
   categoryId: string;
 }
+interface ProductListNames {
+  id: number;
+  name: string;
+}
 interface ProductDto {
   name: string;
   products: string[];
 }
-export async function purchase(purchaseData: ProductDto) :Promise<void>{
+interface ProductListDto {
+  name: string;
+  products: ProductDto[];
+}
+export async function purchase(purchaseData: ProductDto): Promise<void> {
   console.log(purchaseData);
   try {
     const response: AxiosResponse<AuthFormData> = await axios.post(
@@ -44,13 +52,29 @@ export async function purchase(purchaseData: ProductDto) :Promise<void>{
     console.error(error);
   }
 }
+export async function deleteProductList(id: string): Promise<void> {
+  try {
+    const response: AxiosResponse<AuthFormData> = await axios.delete(
+      `http://0.0.0.0:8080/productList/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      }
+    );
+    console.log(response.data.token);
+  } catch (error: any) {
+    console.error(error);
+  }
+}
+
 
 export async function loginUser(
   phone: string,
   password: string
 ): Promise<number> {
   try {
-    const body = { phone, password }; // задаем параметры в request body
+    const body = { phone, password };
     const response: AxiosResponse<AuthFormData> = await axios.post(
       "http://0.0.0.0:8080/login",
       body,
@@ -108,9 +132,25 @@ export async function getCategories(): Promise<CategoryDTO[]> {
 
 export async function getProducts(categoryName: string): Promise<Product[]> {
   try {
-    const response: AxiosResponse<Product[]> = await axios.get<
-    Product[]
-    >(`http://0.0.0.0:8080/product/category/${categoryName}`, {
+    const response: AxiosResponse<Product[]> = await axios.get<Product[]>(
+      `http://0.0.0.0:8080/product/category/${categoryName}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+export async function getProductListsNames(): Promise<ProductListNames[]> {
+  try {
+    const response: AxiosResponse<ProductListNames[]> = await axios.get<
+      ProductListNames[]
+    >(`http://0.0.0.0:8080/productList/names`, {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
@@ -121,6 +161,23 @@ export async function getProducts(categoryName: string): Promise<Product[]> {
     return [];
   }
 }
+export async function getProductList(
+  productListId: string
+): Promise<ProductDto> {
+  try {
+    const response: AxiosResponse<ProductDto> = await axios.get<ProductDto>(
+      `http://0.0.0.0:8080/productList/${productListId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export const getAuthToken = () => {
   return window.localStorage.getItem("auth_token");
@@ -129,14 +186,3 @@ export const getAuthToken = () => {
 export const setAuthHeader = (token) => {
   window.localStorage.setItem("auth_token", token);
 };
-
-export async function checkAuth(): Promise<boolean> {
-  try {
-    const response = await axios.get("http://0.0.0.0:8080/api/user/check");
-    console.log(response.data);
-    return response.data;
-  } catch (error: any) {
-    console.error(error);
-    return false;
-  }
-}

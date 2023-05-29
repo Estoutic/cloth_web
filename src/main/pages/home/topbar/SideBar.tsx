@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import useProductCategories from "../../../../api/product/useProductCategories";
+import useProductListNames from "../../../../api/product_list/useProductListNames";
 import CloseButtonComponent from "../components/CloseButtonComponent";
 
 const SideBarContainer = styled.div`
@@ -25,6 +26,17 @@ const CategoriesList = styled.ul`
   position: fixed;
   height: calc(100% - 60px);
   overflow-y: auto;
+
+  &:first-of-type {
+    margin-top: 20px;
+    position: fixed;
+  }
+
+  &:not(:first-of-type) {
+    margin-top: 500px;
+    margin-left: 30px;
+    position: absolute;
+  }
 `;
 
 const CategoryLink = styled(Link)`
@@ -82,18 +94,20 @@ const ProfileImage = styled.img`
   outline: none;
   margin-left: 22px;
   z-index: 9999;
-  position:fixed ;
+  position: fixed;
 `;
 
 const SideBar = () => {
   const { data } = useProductCategories();
+  const { data: names } = useProductListNames();
+  console.log(names);
   const [isSideBarVisible, setIsSideBarVisible] = useState(false);
 
   const toggleSideBarVisibility = () => {
     setIsSideBarVisible(!isSideBarVisible);
   };
 
-  if (!data) {
+  if (!data || !names) {
     return null;
   }
 
@@ -108,7 +122,6 @@ const SideBar = () => {
         onClick={toggleSideBarVisibility}
       />
       <SideBarContainer style={{ display: isSideBarVisible ? "flex" : "none" }}>
-        
         <CategoryTitle>Одежда</CategoryTitle>
 
         <CategoriesList>
@@ -117,6 +130,14 @@ const SideBar = () => {
               <CategoryLink to={`/${category.name}`}>
                 {category.title}
               </CategoryLink>
+            </li>
+          ))}
+        </CategoriesList>
+        <CategoryTitle>Списки</CategoryTitle>
+        <CategoriesList>
+          {names.map((name) => (
+            <li key={name.id}>
+              <CategoryLink to={`/lists/${name.id}`}>{name.name}</CategoryLink>
             </li>
           ))}
         </CategoriesList>
