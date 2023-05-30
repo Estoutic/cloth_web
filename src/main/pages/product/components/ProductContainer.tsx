@@ -133,7 +133,7 @@ const ProductContainer = () => {
                 /> */}
               </ProductCountInputContainer>
               <ProductButton onClick={handleButtonClick}>
-                Добавить в корзину
+                Добавить в список
               </ProductButton>
             </ProductCard>
           );

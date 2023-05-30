@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useDeleteProductList from "../../../api/product_list/useDeleteProductList";
 import styled from "styled-components";
 import useProductList from "../../../api/product_list/useProductList";
@@ -8,7 +8,7 @@ import SideBar from "../home/topbar/SideBar";
 const SideBarContainer = styled.div`
   position: fixed;
   top: 0;
-  margin-left: 70%;
+  margin-left: 80%;
   z-index: 999;
   overflow-x: hidden;
   padding-top: 30px;
@@ -17,7 +17,7 @@ const SideBarContainer = styled.div`
 `;
 
 const Tittle = styled.a`
-  font-size: 32px;
+  font-size: 28px;
   color: black;
   width: 100%;
   height: 100%;
@@ -86,12 +86,14 @@ const ProductButton = styled.button`
   width: 100%;
   height: 100%;
   padding: 0;
-  &:hover{
+  &:hover {
     border: 1px solid #ccc;
   }
 `;
 
 const ProductList = () => {
+
+  const navigate = useNavigate();
   const location = useLocation();
 
   const productListId = decodeURI(location.pathname).substring(7);
@@ -100,17 +102,20 @@ const ProductList = () => {
 
   console.log({ productList });
 
-  const handleButtonClick = () => {
-    deleteMutation.mutate(productListId);
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    deleteMutation.mutateAsync(productListId).then(() => {
+      navigate("/lists");
+    });
     console.log("Delete list");
-    window.location.reload();
   };
+
   return (
     <>
       <SideBar />
       <SideBarContainer>
         <Tittle>{productList?.name}</Tittle>
-        <ProductButton onClick={() => handleButtonClick()}>X</ProductButton>
+<ProductButton onClick={handleButtonClick}>X</ProductButton>
       </SideBarContainer>
 
       <CartTableContainer>

@@ -6,8 +6,8 @@ const useProductPurchase = (): UseMutationResult<void, AxiosError<unknown, any>,
     const queryClient = useQueryClient();
         
     return useMutation((id: string) => deleteProductList(id), {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: async () => {
+        queryClient.invalidateQueries("productLists");
       },
     });
   };

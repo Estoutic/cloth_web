@@ -114,7 +114,7 @@ const SideBar = () => {
   return (
     <>
       <Link to="/lists">
-        <ProfileImage src="149347.png" alt="lists" />
+        <ProfileImage src="/149347.png" alt="lists" />
       </Link>
       <CloseButtonComponent
         isOpen={isSideBarVisible}

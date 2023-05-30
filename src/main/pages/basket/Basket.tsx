@@ -133,6 +133,7 @@ const Basket: React.FC = () => {
     console.log(productPurchases);
     mutate(productPurchases);
     clearCart();
+    window.location.reload();
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setListName(e.target.value);
