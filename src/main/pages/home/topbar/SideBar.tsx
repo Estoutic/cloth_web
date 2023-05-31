@@ -96,6 +96,19 @@ const ProfileImage = styled.img`
   top: 100px;
   z-index: 9999;
   position: fixed;
+  top: 100px;
+`;
+
+const LogoutImage = styled.img`
+  width: 30px;
+  height: 30px;
+  outline: none;
+  margin-left: 22px;
+  z-index: 9999;
+  position: fixed;
+  top: 20px;
+  right: 50px;
+
 `;
 
 const SideBar = () => {
@@ -104,6 +117,9 @@ const SideBar = () => {
   console.log(names);
   const [isSideBarVisible, setIsSideBarVisible] = useState(false);
 
+  const handleOnClick = () => {
+    window.localStorage.setItem("userData", "");
+  }
   const toggleSideBarVisibility = () => {
     setIsSideBarVisible(!isSideBarVisible);
   };
@@ -116,6 +132,9 @@ const SideBar = () => {
     <>
       <Link to="/lists">
         <ProfileImage src="/149347.png" alt="lists" />
+      </Link>
+      <Link to="/login">
+        <LogoutImage src="/logout.svg" alt="lists" onClick={handleOnClick} />
       </Link>
       <CloseButtonComponent
         isOpen={isSideBarVisible}
