@@ -9,7 +9,7 @@ interface Params {
 const useProductPurchase = (): UseMutationResult<void, AxiosError<unknown, any>, Params> => {
     const queryClient = useQueryClient();
     return useMutation((data: Params) => purchase(data), {
-      onSuccess: () => {
+      onSuccess:async () => {
         queryClient.invalidateQueries("productLists");
       },
     });
