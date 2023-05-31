@@ -46,7 +46,7 @@ interface ResponseUserData {
 export async function purchase(purchaseData: ProductDto): Promise<void> {
   console.log(purchaseData);
   try {
-    await axios.post("http://cloth_back:8080/productList", purchaseData, {
+    await axios.post("http://0.0.0.0:3400/productList", purchaseData, {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export async function purchase(purchaseData: ProductDto): Promise<void> {
 }
 export async function deleteProductList(id: string): Promise<void> {
   try {
-    await axios.delete(`http://cloth_back:8080/productList/${id}`, {
+    await axios.delete(`http://0.0.0.0:3400/productList/${id}`, {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
@@ -75,7 +75,7 @@ export async function loginUser(
   try {
     const body = { phone, password };
     const response: AxiosResponse<ResponseUserData> = await axios.post(
-      "http://cloth_back:8080/login",
+      "http://0.0.0.0:3400/login",
       body,
       {
         headers: {
@@ -95,7 +95,7 @@ export async function editUser(userData: UserData): Promise<string> {
   console.log(userData);
   try {
     const response: AxiosResponse<string> = await axios.post(
-      "http://cloth_back:8080/user",
+      "http://0.0.0.0:3400/user",
       userData,
       {
         headers: {
@@ -117,7 +117,7 @@ export async function registerUser(userData: UserData): Promise<void> {
   console.log(userData);
   try {
     const response: AxiosResponse<ResponseUserData> = await axios.post(
-      "http://cloth_back:8080/register",
+      "http://0.0.0.0:3400/register",
       userData,
       {
         headers: {
@@ -137,7 +137,7 @@ export async function getCategories(): Promise<CategoryDTO[]> {
   try {
     const response: AxiosResponse<CategoryDTO[]> = await axios.get<
       CategoryDTO[]
-    >("http://cloth_back:8080/category/all", {
+    >("http://0.0.0.0:3400/category/all", {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
@@ -152,7 +152,7 @@ export async function getCategories(): Promise<CategoryDTO[]> {
 export async function getProducts(categoryName: string): Promise<Product[]> {
   try {
     const response: AxiosResponse<Product[]> = await axios.get<Product[]>(
-      `http://cloth_back:8080/product/category/${categoryName}`,
+      `http://0.0.0.0:3400/product/category/${categoryName}`,
       {
         headers: {
           Authorization: `Bearer ${getAuthToken()}`,
@@ -169,7 +169,7 @@ export async function getProductListsNames(): Promise<ProductListNames[]> {
   try {
     const response: AxiosResponse<ProductListNames[]> = await axios.get<
       ProductListNames[]
-    >(`http://cloth_back8080/productList/names`, {
+    >(`http://0.0.0.0:3400/productList/names`, {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
@@ -185,7 +185,7 @@ export async function getProductList(
 ): Promise<ResponseProductDto | undefined> {
   try {
     const response: AxiosResponse<ResponseProductDto> = await axios.get<ResponseProductDto>(
-      `http://cloth_back:8080/productList/${productListId}`,
+      `http://0.0.0.0:3400/productList/${productListId}`,
       {
         headers: {
           Authorization: `Bearer ${getAuthToken()}`,

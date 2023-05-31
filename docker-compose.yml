@@ -6,8 +6,8 @@ services:
     container_name: cloth_web
     restart: unless-stopped
     ports:
-      - 3100:3000
+      - 3300:3000
 
 networks:
-  main-net:
+  master-net:
     external: true
