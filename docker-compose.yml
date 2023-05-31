@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  tabaco-web:
+    image: cloth_web:latest
+    container_name: cloth_web
+    restart: unless-stopped
+    ports:
+      - 3100:3000
+
+networks:
+  main-net:
+    external: true
