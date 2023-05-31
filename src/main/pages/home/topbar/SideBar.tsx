@@ -93,6 +93,7 @@ const ProfileImage = styled.img`
   height: 30px;
   outline: none;
   margin-left: 22px;
+  top: 100px;
   z-index: 9999;
   position: fixed;
 `;

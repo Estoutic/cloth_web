@@ -104,7 +104,7 @@ interface ProductPurchase {
   products: string[];
 }
 type CartItem = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   imageLink: string;
@@ -123,9 +123,7 @@ const Basket: React.FC = () => {
   const { mutate } = useProductPurchase();
 
   const handleImageClick = () => {
-    const productIds: string[] = cartItems.map((item: CartItem) =>
-      item.id.toString()
-    );
+    const productIds: string[] = cartItems.map((item: CartItem) => item.id);
     const productPurchases: ProductPurchase = {
       name: listName,
       products: productIds,

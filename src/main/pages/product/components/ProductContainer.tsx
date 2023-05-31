@@ -90,15 +90,6 @@ const ProductContainer = () => {
     <ProductTableContainer>
       <ProductsGrid>
         {data.map((product, index) => {
-          const handleCountChange = (event) => {
-            const value = event.target.valueAsNumber;
-            setCounts((prevCounts) => {
-              const newCounts = [...prevCounts];
-              newCounts[index] = value;
-              return newCounts;
-            });
-          };
-
           const handleButtonClick = () => {
             console.log("Количество добавленных продуктов: ", counts[index]);
             addToCart(
@@ -108,7 +99,6 @@ const ProductContainer = () => {
                 price: product.price,
                 imageLink: product.imageLink,
               },
-              counts[index]
             );
 
             setCounts((prevCounts) => {

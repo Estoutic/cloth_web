@@ -2,16 +2,15 @@ import { useMutation, UseMutationResult, useQueryClient } from "react-query";
 import { AxiosError } from "axios";
 import { purchase } from "../userApi";
 
-type ProductDto = {
-    id: string;
-    count: number;
+interface Params {
+  name: string;
+  products: string[]
 }
-const useProductPurchase = (): UseMutationResult<number | undefined, AxiosError<unknown, any>, Params> => {
+const useProductPurchase = (): UseMutationResult<void, AxiosError<unknown, any>, Params> => {
     const queryClient = useQueryClient();
-        
-    return useMutation((data: ProductDto) => purchase(data), {
-      onSuccess: (data) => {
-        console.log(data);
+    return useMutation((data: Params) => purchase(data), {
+      onSuccess: () => {
+        queryClient.invalidateQueries("productLists");
       },
     });
   };

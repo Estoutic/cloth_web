@@ -8,9 +8,9 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({ isAuthenticated: false });
 
-export const useAuth = () => useContext(AuthContext);
-
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const location = useLocation();
 
   const authToken = window.localStorage.getItem("auth_token");
@@ -19,12 +19,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     authToken !== null && authToken !== "null" && authToken !== ""
       ? true
       : false;
-  console.log(window.localStorage.getItem("auth_token"));
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated }}>
+    <>
       {<Navigate to={isAuthenticated ? location.pathname : "/login"} />}
-      {/* {isAuthenticated ? <: <Navigate to="/login" />} */}
       {children}
-    </AuthContext.Provider>
+    </>
   );
 };

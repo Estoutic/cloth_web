@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import React, { useState } from "react";
+import AuthFormData from '../types';
 
 const Form = styled.form<FormProps>`
   margin-left: 20px;
@@ -31,10 +32,24 @@ const Title = styled.h2`
   color: #333333;
 `;
 
+type AuthFormProps = {
+  type: "login" | "register";
+  onSubmit: (formData: AuthFormData) => void;
+  formPosition?: "left" | "right";
+  isLoginFormOpen: boolean;
+};
+
+type FormProps = {
+  formPosition: "left" | "right";
+};
+
 const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
   const [formData, setFormData] = useState<AuthFormData>({
     phone: "",
     password: "",
+    firstName: "",
+    surName: "",
+    lastName: "",
   });
 
   const handleInputChange = (
@@ -54,7 +69,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
       formData.surName ||
       formData.lastName
     ) {
-      onSubmit(formData);
+      onSubmit({
+        phone: formData.phone,
+        password: formData.password,
+        firstName: formData.firstName,
+        surName: formData.surName,
+        lastName: formData.lastName
+      });
     }
   };
 

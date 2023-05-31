@@ -4,16 +4,14 @@ import userRegistrationKeys from "./keys";
 import { AxiosError } from "../../../node_modules/axios/index";
 
 type Params = {
-  firstName?: string;
-  surName?: string;
-  lastName?: string;
-  bonus?: number;
+  firstName: string;
+  surName: string;
+  lastName: string;
   phone: string;
   password: string;
 }
 
-const useUserAuth = (): UseMutationResult<number,AxiosError,Params> =>{
-  const queryClient = useQueryClient();
+const useUserAuth = (): UseMutationResult<void,AxiosError,Params> =>{
 
   return useMutation((data: Params) => registerUser(data),{
     onSuccess: (data) => {

@@ -1,7 +1,7 @@
 import create from "zustand";
 
 type CartItem = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   imageLink: string;
@@ -10,7 +10,8 @@ type CartStore = {
   cartItems: CartItem[];
   totalPrice: number;
   addToCart: (product: CartItem) => void;
-  removeFromCart: (id: number) => void; 
+  removeFromCart: (id: string) => void; 
+  clearCart: () => void;
 };
 
 
@@ -25,7 +26,8 @@ const useStore = create<CartStore>((set) => ({
       );
       const newCartItems = [...state.cartItems];
       if (itemInCartIndex >= 0) {
-        return null;
+        alert(`item ${product.id} is already in cart`);
+        return state; 
       } else {
         newCartItems.push({
           id: product.id,
