@@ -105,9 +105,9 @@ const LogoutImage = styled.img`
   outline: none;
   margin-left: 30px;
   z-index: 9999;
+  top: 176px;
   position: fixed;
-  right: 55px;
-
+  left: -6px;
 `;
 
 const SideBar = () => {
@@ -118,7 +118,7 @@ const SideBar = () => {
 
   const handleOnClick = () => {
     window.localStorage.setItem("userData", "");
-  }
+  };
   const toggleSideBarVisibility = () => {
     setIsSideBarVisible(!isSideBarVisible);
   };
