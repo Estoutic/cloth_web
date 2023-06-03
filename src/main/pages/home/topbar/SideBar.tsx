@@ -103,11 +103,10 @@ const LogoutImage = styled.img`
   width: 30px;
   height: 30px;
   outline: none;
-  margin-left: 22px;
+  margin-left: 30px;
   z-index: 9999;
   position: fixed;
-  top: 20px;
-  right: 50px;
+  right: 55px;
 
 `;
 
