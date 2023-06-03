@@ -120,7 +120,7 @@ const Basket: React.FC = () => {
 
   const total = cartItems.reduce((acc, curr) => acc + curr.price, 0);
 
-  const { mutate } = useProductPurchase();
+  const  productPurchaseMutate  = useProductPurchase();
 
   const handleImageClick = () => {
     const productIds: string[] = cartItems.map((item: CartItem) => item.id);
@@ -129,9 +129,11 @@ const Basket: React.FC = () => {
       products: productIds,
     };
     console.log(productPurchases);
-    mutate(productPurchases);
-    clearCart();
-    window.location.reload();
+    productPurchaseMutate.mutateAsync(productPurchases).then(() => {
+      clearCart();
+      window.location.reload();
+    });
+
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setListName(e.target.value);
